@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+  <!-- Inherit from the light Material Theme -->
+  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Override the app bar color -->
+    <item name="colorPrimary">@color/md_teal_500</item>
+    <!-- Override the color of UI controls -->
+    <item name="colorAccent">@color/md_orange_A200</item>
+  </style>
+
+  <!-- Inherit from the light Material Theme -->
+  <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Override the app bar color -->
+    <item name="colorPrimary">@color/md_teal_500</item>
+    <!-- Override the color of UI controls -->
+    <item name="colorAccent">@color/md_orange_A200</item>
+  </style>
+</resources>

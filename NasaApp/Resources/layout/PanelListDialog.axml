@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="Power Rating (kW)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt" />
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textInputEditText2"
+        android:text="4"
+        android:hint="Power Rating"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="3pt" />
+    <TextView
+        android:text="Module Type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"
+        android:layout_marginTop="2pt" />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="15pt"
+        android:id="@+id/spinner1"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt"
+        android:layout_marginTop="2pt" />
+    <TextView
+        android:text="Array Type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"
+        android:layout_marginTop="2pt" />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="15pt"
+        android:id="@+id/spinner2"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt"
+        android:layout_marginTop="2pt" />
+    <TextView
+        android:text="System Looses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt" />
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textInputEditText1"
+        android:text="14"
+        android:hint="System Losses (%)"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="3pt" />
+    <TextView
+        android:text="Tilt Angle: 90°"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"
+        android:textSize="8pt"
+        android:layout_marginTop="2pt" />
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar1"
+        android:max="180"
+        android:progress="90"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt"
+        android:layout_marginBottom="3pt" />
+    <TextView
+        android:text="Number of Panels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt" />
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textInputEditText5"
+        android:hint="Number of Panels"
+        android:layout_marginRight="8pt"
+        android:layout_marginLeft="8pt"
+        android:inputType="numberDecimal"
+        android:text="1" />
+</LinearLayout>

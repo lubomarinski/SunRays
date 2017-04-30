@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="Consumer Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"
+        android:layout_marginTop="2pt" />
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textInputEditText1"
+        android:hint="Consumer Name"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt" />
+    <TextView
+        android:text="Energy Consumation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"
+        android:layout_marginTop="2pt" />
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textInputEditText2"
+        android:hint="Energy Consumation (W)"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt"
+        android:inputType="numberDecimal" />
+    <TextView
+        android:text="Usage Hours: 0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/usageText"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"
+        android:textSize="8pt"
+        android:layout_marginTop="2pt" />
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar1"
+        android:max="48"
+        android:progress="0"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt"
+        android:layout_marginBottom="3pt" />
+    <TextView
+        android:text="Number of Consumers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"
+        android:layout_marginTop="2pt" />
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/numberConsumers"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt"
+        android:hint="Number of Consumers"
+        android:inputType="numberDecimal"
+        android:text="1" />
+</LinearLayout>

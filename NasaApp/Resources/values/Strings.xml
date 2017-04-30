@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Hello">Hello World, Click Me!</string>
+    <string name="ApplicationName">SunRays</string>
+    <string name="module_type">Choose module type</string>
+    <string-array name="module_type_array">
+      <item>Monocrystalline</item>
+      <item>Polycrystalline</item>
+      <item>ThinFilm</item>
+    </string-array>
+  <string name="array_type">Choose array type</string>
+  <string-array name="array_type_array">
+    <item>FixedOpenRack</item>
+    <item>FixedRoofMounted</item>
+    <item>OneAxis</item>
+    <item>OneAxisBacktracking</item>
+    <item>TwoAxis</item>
+  </string-array>
+</resources>

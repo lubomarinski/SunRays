@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="24dp">
+            <TextView
+                android:text="Direct Solar Irradiation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView1"
+                android:textColor="@color/material_grey_800"
+                android:textSize="22sp"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_marginTop="16dp" />
+            <ImageView
+                android:src="@drawable/solar_irradiance_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView1"
+                android:scaleType="fitStart"
+                android:adjustViewBounds="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp" />
+            <TextView
+                android:text="DC System Size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:textColor="@color/material_grey_800"
+                android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The DC system size is the DC (direct current) power rating of the photovoltaic array in kilowatts (kW) at standard test conditions (STC). SunRays can model any size of array, from residential rooftop systems to large ground-mounted power generation systems." />
+            <TextView
+                android:text="Module Type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:textColor="@color/material_grey_800"
+                android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The module type describes the photovoltaic modules in the array. If you do not have information about the modules in the system, use the default Standard module type. Otherwise, you can use the nominal module efficiency, cell material, and temperature coefficient from the module data sheet to choose the module type." />
+            <TextView
+                android:text="Array Type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:textColor="@color/material_grey_800"
+                android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The array type describes whether the PV modules in the array are fixed, or whether they move to track the movement of the sun across the sky with one or two axes of rotation. The default value is a fixed, or no tracking." />
+            <TextView
+                android:text="System Losses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:textColor="@color/material_grey_800"
+                android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The system losses account for performance losses you would expect in a real system that are not explicitly calculated by the model equations. The default value for the system losses is 14%." />
+            <TextView
+                android:text="Tilt Angle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:textColor="@color/material_grey_800"
+                android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The tilt angle is the angle from horizontal of the photovoltaic modules in the array. For a fixed array, the tilt angle is the angle from horizontal of the array where 0° = horizontal, and 90° = vertical." />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

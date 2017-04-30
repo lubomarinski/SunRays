@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textInputEditText1"
+        android:layout_gravity="left"
+        android:hint="Network Name"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt" />
+    <TextView
+        android:text="Location:(0,0)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationText"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt" />
+    <Button
+        android:text="Change Location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/changeLocationButton"
+        android:layout_marginLeft="8pt"
+        android:layout_marginRight="8pt" />
+</LinearLayout>
