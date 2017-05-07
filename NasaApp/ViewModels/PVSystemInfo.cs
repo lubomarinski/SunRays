@@ -13,25 +13,27 @@ namespace NasaApp.ViewModels
         public int ID { get; set; }
         public double SystemSize { get; private set; }
         public IList<Panel> Panels { get; private set; }
-        public int PanelCount { get => Panels.Count; }
+        public int PanelCount { get; private set; }
 
-        public PVSystemInfo(int id, double systemSize, IList<Panel> panels)
+        public PVSystemInfo(int id, double systemSize, IList<Panel> panels, int panelCount)
         {
             ID = id;
             SystemSize = systemSize;
             Panels = panels;
+            PanelCount = panelCount;
         }
 
         public static async Task<PVSystemInfo> FromDBAsync(DatabaseHelper db, long networkID)
         {
-            IList<Panel> panels = (await db.Panels
+            List<Panel> panels = (await db.Panels
                 .SelectAllAsync())
-                .Where(x => x.ID == networkID)
+                .Where(x => x.NetworkID == networkID)
                 .ToList();
             return new PVSystemInfo(
                 (int)networkID,
                 systemSize: panels.Sum(x => x.PowerRating * x.Count),
-                panels: panels
+                panels: panels,
+                panelCount: panels.Select(x => x.Count).Sum()
             );
         }
 
@@ -43,7 +45,7 @@ namespace NasaApp.ViewModels
             public double AnnualDCArrayOutput { get; set; }
         }
 
-        private async Task<SystemSummary> GetPanelSummaryAsync(Panel panel, IPowerCalculator powerCalculator, PVWattsV5ApiClient pvWattsApiClient, GeoCoords coords, double azmuth, DateTime dateTime, double timeZoneOffsetHours, double tempCelsius)
+        public async Task<SystemSummary> GetPanelSummaryAsync(Panel panel, IPowerCalculator powerCalculator, PVWattsV5ApiClient pvWattsApiClient, GeoCoords coords, double azmuth, DateTime dateTime, double timeZoneOffsetHours, double tempCelsius)
         {
             int count = panel.Count;
             double powerLoss = powerCalculator.CalculateModulePowerLoss(panel.ModuleType, tempCelsius);
@@ -82,26 +84,23 @@ namespace NasaApp.ViewModels
             };
         }
 
-        public Task<SystemSummary> GetSystemSummaryAsync(IPowerCalculator powerCalculator, PVWattsV5ApiClient pvWattsApiClient, GeoCoords coords, DateTime dateTime, double timeZoneOffsetHours, double tempCelsius)
+        public async Task<SystemSummary> GetSystemSummaryAsync(IPowerCalculator powerCalculator, PVWattsV5ApiClient pvWattsApiClient, GeoCoords coords, DateTime dateTime, double timeZoneOffsetHours, double tempCelsius)
         {
-            return Task.Run(async delegate
+            double azmuth = powerCalculator.CalculateAizmuth(coords, dateTime, timeZoneOffsetHours);
+            int totalPanelCount = Panels.Count;
+
+            IEnumerable<Task<SystemSummary>> summaryPerTypeTask =
+                Panels.Select(x => GetPanelSummaryAsync(x, powerCalculator, pvWattsApiClient, coords, azmuth, dateTime, timeZoneOffsetHours, tempCelsius));
+
+            return (await Task.WhenAll(summaryPerTypeTask)).Aggregate(new SystemSummary { }, (acc, x) =>
             {
-                double azmuth = powerCalculator.CalculateAzmuth(coords, dateTime, timeZoneOffsetHours);
-                int totalPanelCount = Panels.Count;
-
-                IEnumerable<Task<SystemSummary>> summaryPerTypeTask = 
-                    Panels.Select(x => GetPanelSummaryAsync(x, powerCalculator, pvWattsApiClient, coords, azmuth, dateTime, timeZoneOffsetHours, tempCelsius));
-
-                return (await Task.WhenAll(summaryPerTypeTask)).Aggregate(new SystemSummary { }, (acc, x) =>
+                return new SystemSummary
                 {
-                    return new SystemSummary
-                    {
-                        HourlyDCArrayOutput = acc.HourlyDCArrayOutput + x.HourlyDCArrayOutput,
-                        TodayDCArrayOutput = acc.TodayDCArrayOutput + x.TodayDCArrayOutput,
-                        MonthlyDCArrayOutput = acc.MonthlyDCArrayOutput + x.MonthlyDCArrayOutput,
-                        AnnualDCArrayOutput = acc.AnnualDCArrayOutput + x.AnnualDCArrayOutput,
-                    };
-                });
+                    HourlyDCArrayOutput = acc.HourlyDCArrayOutput + x.HourlyDCArrayOutput,
+                    TodayDCArrayOutput = acc.TodayDCArrayOutput + x.TodayDCArrayOutput,
+                    MonthlyDCArrayOutput = acc.MonthlyDCArrayOutput + x.MonthlyDCArrayOutput,
+                    AnnualDCArrayOutput = acc.AnnualDCArrayOutput + x.AnnualDCArrayOutput,
+                };
             });
         }
     }

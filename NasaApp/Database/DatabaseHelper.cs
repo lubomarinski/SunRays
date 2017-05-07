@@ -22,29 +22,29 @@ namespace NasaApp.Database
             Consumers = new Consumers(this);
         }
 
-        public override async void OnCreate(SQLiteDatabase db)
+        public override void OnCreate(SQLiteDatabase db)
         {
-            await CreateDatabaseAsync(db);
+            CreateDatabase(db);
         }
 
-        public override async void OnUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+        public override void OnUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
         {
-            await DropDatabaseAsync(db);
-            await CreateDatabaseAsync(db);
+            DropDatabase(db);
+            CreateDatabase(db);
         }
 
-        private async Task CreateDatabaseAsync(SQLiteDatabase db)
+        private void CreateDatabase(SQLiteDatabase db)
         {
-            await SolarNetworks.CreateAsync();
-            await Panels.CreateAsync();
-            await Consumers.CreateAsync();
+            SolarNetworks.Create(db);
+            Panels.Create(db);
+            Consumers.Create(db);
         }
 
-        private async Task DropDatabaseAsync(SQLiteDatabase db)
+        private void DropDatabase(SQLiteDatabase db)
         {
-            await SolarNetworks.DropAsync();
-            await Panels.DropAsync();
-            await Consumers.DropAsync();
+            SolarNetworks.Drop(db);
+            Panels.Drop(db);
+            Consumers.Drop(db);
         }
 
         void IDisposable.Dispose()

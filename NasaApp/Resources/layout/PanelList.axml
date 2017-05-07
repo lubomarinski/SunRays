@@ -18,8 +18,8 @@
         android:dividerHeight="0dp"
         android:paddingTop="2dp" />
     <ImageButton
-        android:layout_width="29pt"
-        android:layout_height="29pt"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
         android:id="@+id/button1"
         android:background="@drawable/AddButton"
         android:layout_gravity="bottom|center"
@@ -29,4 +29,13 @@
         android:layout_weight="0"
         android:textStyle="normal"
         android:src="@drawable/ic_add" />
+    <TextView
+        android:text="You do not have any panels."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/emptyText"
+        android:layout_gravity="center|top"
+        android:textSize="8pt"
+        android:layout_marginTop="10pt"
+        android:visibility="visible" />
 </FrameLayout>

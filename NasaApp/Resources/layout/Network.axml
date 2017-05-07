@@ -3,459 +3,450 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<!-- The main content view -->
-    <LinearLayout
-        android:id="@+id/main_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    <!-- The main content view -->
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/main_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="16dp">
-                <ImageView
-                    android:src="@drawable/ic_brightness"
-                    android:layout_width="64dp"
-                    android:layout_height="48.0dp"
-                    android:layout_gravity="center" />
-            </LinearLayout>
-        <!-- The production card -->
-            <android.support.v7.widget.CardView
-                android:id="@+id/production_card"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:id="@+id/production_card_bg_root"
-                    android:background="@color/md_green_100">
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="16dp">
+                    <ImageView
+                        android:src="@drawable/ic_brightness"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="12dp" />
+                </LinearLayout>
+            <!-- The production card -->
+                <android.support.v7.widget.CardView
+                    android:id="@+id/production_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:id="@+id/production_card_bg_root"
+                        android:background="@color/md_green_100">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal">
+                            <TextView
+                                android:text="Production Summary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:layout_marginBottom="4dp"
+                                android:textSize="18sp"
+                                android:textStyle="normal" />
+                        <!-- Hourly production -->
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal">
+                                <TextView
+                                    android:text="Current: "
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="20sp" />
+                                <TextView
+                                    android:text="0.44 kWh"
+                                    android:id="@+id/production_per_hour"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/primary_dark_material_dark"
+                                    android:textSize="@dimen/abc_text_size_headline_material" />
+                            </LinearLayout>
+                        <!-- Daily production -->
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal">
+                                <TextView
+                                    android:text="Today: "
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="20sp" />
+                                <TextView
+                                    android:text="0.44 kWh"
+                                    android:id="@+id/production_daily"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/primary_dark_material_dark"
+                                    android:textSize="@dimen/abc_text_size_headline_material" />
+                            </LinearLayout>
+                        <!-- Monthly production -->
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal">
+                                <TextView
+                                    android:text="Monthly: "
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="20sp" />
+                                <TextView
+                                    android:text="0.44 kWh"
+                                    android:id="@+id/production_per_month"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/primary_dark_material_dark"
+                                    android:textSize="@dimen/abc_text_size_headline_material" />
+                            </LinearLayout>
+                        <!-- Yearly production -->
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal">
+                                <TextView
+                                    android:text="Yearly: "
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="20sp" />
+                                <TextView
+                                    android:text="0.44 kWh"
+                                    android:id="@+id/production_per_year"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/primary_dark_material_dark"
+                                    android:textSize="@dimen/abc_text_size_headline_material" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <!-- The location info card -->
+                <android.support.v7.widget.CardView
+                    android:id="@+id/location_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".60"
+                    android:padding="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="0dp">
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal">
-                        <TextView
-                            android:text="Production Summary"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="fill_horizontal"
+                            android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
+                            <TextView
+                                android:text="Latitude"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:layout_marginBottom="4dp"
+                                android:textStyle="normal"
+                                android:textSize="@dimen/abc_text_size_subhead_material" />
+                            <TextView
+                                android:text="42.499161"
+                                android:id="@+id/latitude_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:textSize="@dimen/abc_text_size_headline_material"
+                                android:textStyle="normal"
+                                android:textColor="@color/primary_dark_material_dark" />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/md_grey_300" />
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="fill_horizontal"
-                            android:layout_marginBottom="4dp"
-                            android:textSize="18sp"
-                            android:textStyle="normal" />
-                    <!-- Hourly production -->
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal">
+                            android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
                             <TextView
-                                android:text="Current: "
+                                android:text="Longtitude"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="20sp" />
+                                android:layout_gravity="fill_horizontal"
+                                android:layout_marginBottom="4dp"
+                                android:textSize="@dimen/abc_text_size_subhead_material"
+                                android:textStyle="normal" />
                             <TextView
-                                android:text="0.44 kWh"
-                                android:id="@+id/production_per_hour"
+                                android:text="27.478477"
+                                android:id="@+id/longtitude_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/primary_dark_material_dark"
-                                android:textSize="@dimen/abc_text_size_headline_material" />
-                        </LinearLayout>
-                    <!-- Daily production -->
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal">
-                            <TextView
-                                android:text="Today: "
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="20sp" />
-                            <TextView
-                                android:text="0.44 kWh"
-                                android:id="@+id/production_daily"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/primary_dark_material_dark"
-                                android:textSize="@dimen/abc_text_size_headline_material" />
-                        </LinearLayout>
-                    <!-- Monthly production -->
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal">
-                            <TextView
-                                android:text="Monthly: "
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="20sp" />
-                            <TextView
-                                android:text="0.44 kWh"
-                                android:id="@+id/production_per_month"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/primary_dark_material_dark"
-                                android:textSize="@dimen/abc_text_size_headline_material" />
-                        </LinearLayout>
-                    <!-- Yearly production -->
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal">
-                            <TextView
-                                android:text="Yearly: "
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="20sp" />
-                            <TextView
-                                android:text="0.44 kWh"
-                                android:id="@+id/production_per_year"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
                                 android:textColor="@color/primary_dark_material_dark"
                                 android:textSize="@dimen/abc_text_size_headline_material" />
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                </android.support.v7.widget.CardView>
+            <!-- The temp & clouds info card -->
+                <android.support.v7.widget.CardView
+                    android:id="@+id/temp_clouds_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".40"
+                    android:padding="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="8dp">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill_horizontal">
+                        <LinearLayout
+                            android:id="@+id/temp_card"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="fill_horizontal"
+                            android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
+                            <TextView
+                                android:text="Temperature"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:layout_marginBottom="4dp"
+                                android:textStyle="normal"
+                                android:textSize="@dimen/abc_text_size_subhead_material" />
+                            <TextView
+                                android:text="25.7°C"
+                                android:id="@+id/temp_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:textSize="@dimen/abc_text_size_headline_material"
+                                android:textStyle="normal"
+                                android:textColor="@color/primary_dark_material_dark" />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/md_grey_300" />
+                        <LinearLayout
+                            android:id="@+id/clouds_card"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal"
+                            android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
+                            <TextView
+                                android:text="Cloudiness"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:layout_marginBottom="4dp"
+                                android:textSize="@dimen/abc_text_size_subhead_material"
+                                android:textStyle="normal" />
+                            <TextView
+                                android:text="20%"
+                                android:id="@+id/clouds_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:textColor="@color/primary_dark_material_dark"
+                                android:textSize="@dimen/abc_text_size_headline_material" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <!-- The PV System card -->
+                <android.support.v7.widget.CardView
+                    android:id="@+id/pv_system_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="0dp">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill_horizontal"
+                        android:background="@color/md_amber_100">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="fill_horizontal"
+                            android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
+                            <TextView
+                                android:text="DC System Size"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:layout_marginBottom="4dp"
+                                android:textStyle="normal"
+                                android:textSize="@dimen/abc_text_size_subhead_material" />
+                            <TextView
+                                android:text="4 kW"
+                                android:id="@+id/system_size_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:textSize="@dimen/abc_text_size_headline_material"
+                                android:textStyle="normal"
+                                android:textColor="@color/primary_dark_material_dark" />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/md_grey_300" />
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal"
+                            android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
+                            <TextView
+                                android:text="Module Count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:layout_marginBottom="4dp"
+                                android:textSize="@dimen/abc_text_size_subhead_material"
+                                android:textStyle="normal" />
+                            <TextView
+                                android:text="24"
+                                android:id="@+id/module_count_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:textColor="@color/primary_dark_material_dark"
+                                android:textSize="@dimen/abc_text_size_headline_material" />
+                            <Button
+                                android:text="Manage"
+                                android:layout_width="match_parent"
+                                android:id="@+id/modules_button"
+                                android:alpha="1"
+                                android:layout_marginLeft="0dp"
+                                android:layout_marginRight="0dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_height="42dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            <!-- The Consumers card -->
+                <android.support.v7.widget.CardView
+                    android:id="@+id/consumers_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginRight="8dp">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill_horizontal"
+                        android:background="@color/md_blue_grey_100">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="fill_horizontal"
+                            android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
+                            <TextView
+                                android:text="Total Energy Usage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:layout_marginBottom="4dp"
+                                android:textStyle="normal"
+                                android:textSize="@dimen/abc_text_size_subhead_material" />
+                            <TextView
+                                android:text="11 kW/h"
+                                android:id="@+id/total_energy_usage_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:textSize="@dimen/abc_text_size_headline_material"
+                                android:textStyle="normal"
+                                android:textColor="@color/primary_dark_material_dark" />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/md_grey_300" />
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal"
+                            android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
+                            <TextView
+                                android:text="Consumer Count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:layout_marginBottom="4dp"
+                                android:textSize="@dimen/abc_text_size_subhead_material"
+                                android:textStyle="normal" />
+                            <TextView
+                                android:text="7"
+                                android:id="@+id/consumer_count_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_horizontal"
+                                android:textColor="@color/primary_dark_material_dark"
+                                android:textSize="@dimen/abc_text_size_headline_material" />
+                            <Button
+                                android:text="Manage"
+                                android:layout_width="match_parent"
+                                android:layout_height="42dp"
+                                android:id="@+id/consumers_button"
+                                android:layout_marginLeft="0dp"
+                                android:layout_marginRight="0dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_weight="0" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <!-- The location info card -->
-            <android.support.v7.widget.CardView
-                android:id="@+id/location_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".60"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="0dp">
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill_horizontal">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="fill_horizontal"
-                        android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
-                        <TextView
-                            android:text="Latitude"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:layout_marginBottom="4dp"
-                            android:textStyle="normal"
-                            android:textSize="@dimen/abc_text_size_subhead_material" />
-                        <TextView
-                            android:text="42.499161"
-                            android:id="@+id/latitude_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:textSize="@dimen/abc_text_size_headline_material"
-                            android:textStyle="normal"
-                            android:textColor="@color/primary_dark_material_dark" />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/md_grey_300" />
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="fill_horizontal"
-                        android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
-                        <TextView
-                            android:text="Longtitude"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:layout_marginBottom="4dp"
-                            android:textSize="@dimen/abc_text_size_subhead_material"
-                            android:textStyle="normal" />
-                        <TextView
-                            android:text="27.478477"
-                            android:id="@+id/longtitude_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:textColor="@color/primary_dark_material_dark"
-                            android:textSize="@dimen/abc_text_size_headline_material" />
-                    </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-        <!-- The temp & clouds info card -->
-            <android.support.v7.widget.CardView
-                android:id="@+id/temp_clouds_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".40"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="8dp">
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill_horizontal">
-                    <LinearLayout
-                        android:id="@+id/temp_card"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="fill_horizontal"
-                        android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
-                        <TextView
-                            android:text="Temperature"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:layout_marginBottom="4dp"
-                            android:textStyle="normal"
-                            android:textSize="@dimen/abc_text_size_subhead_material" />
-                        <TextView
-                            android:text="25.7°C"
-                            android:id="@+id/temp_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:textSize="@dimen/abc_text_size_headline_material"
-                            android:textStyle="normal"
-                            android:textColor="@color/primary_dark_material_dark" />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/md_grey_300" />
-                    <LinearLayout
-                        android:id="@+id/clouds_card"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="fill_horizontal"
-                        android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
-                        <TextView
-                            android:text="Cloudiness"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:layout_marginBottom="4dp"
-                            android:textSize="@dimen/abc_text_size_subhead_material"
-                            android:textStyle="normal" />
-                        <TextView
-                            android:text="20%"
-                            android:id="@+id/clouds_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:textColor="@color/primary_dark_material_dark"
-                            android:textSize="@dimen/abc_text_size_headline_material" />
-                    </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <!-- The PV System card -->
-            <android.support.v7.widget.CardView
-                android:id="@+id/pv_system_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="0dp">
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill_horizontal"
-                    android:background="@color/md_amber_100">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="fill_horizontal"
-                        android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
-                        <TextView
-                            android:text="DC System Size"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:layout_marginBottom="4dp"
-                            android:textStyle="normal"
-                            android:textSize="@dimen/abc_text_size_subhead_material" />
-                        <TextView
-                            android:text="4 kW"
-                            android:id="@+id/system_size_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:textSize="@dimen/abc_text_size_headline_material"
-                            android:textStyle="normal"
-                            android:textColor="@color/primary_dark_material_dark" />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/md_grey_300" />
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="fill_horizontal"
-                        android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
-                        <TextView
-                            android:text="Module Count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:layout_marginBottom="4dp"
-                            android:textSize="@dimen/abc_text_size_subhead_material"
-                            android:textStyle="normal" />
-                        <TextView
-                            android:text="24"
-                            android:id="@+id/module_count_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:textColor="@color/primary_dark_material_dark"
-                            android:textSize="@dimen/abc_text_size_headline_material" />
-                        <Button
-                            android:text="Manage"
-                            android:layout_width="match_parent"
-                            android:id="@+id/modules_button"
-                            android:alpha="1"
-                            android:layout_marginLeft="0dp"
-                            android:layout_marginRight="0dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_height="42dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-        <!-- The Consumers card -->
-            <android.support.v7.widget.CardView
-                android:id="@+id/consumers_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="8dp">
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill_horizontal"
-                    android:background="@color/md_blue_grey_100">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="fill_horizontal"
-                        android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
-                        <TextView
-                            android:text="Total Energy Usage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:layout_marginBottom="4dp"
-                            android:textStyle="normal"
-                            android:textSize="@dimen/abc_text_size_subhead_material" />
-                        <TextView
-                            android:text="11 kW/h"
-                            android:id="@+id/total_energy_usage_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:textSize="@dimen/abc_text_size_headline_material"
-                            android:textStyle="normal"
-                            android:textColor="@color/primary_dark_material_dark" />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/md_grey_300" />
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="fill_horizontal"
-                        android:padding="@dimen/abc_action_bar_icon_vertical_padding_material">
-                        <TextView
-                            android:text="Consumer Count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:layout_marginBottom="4dp"
-                            android:textSize="@dimen/abc_text_size_subhead_material"
-                            android:textStyle="normal" />
-                        <TextView
-                            android:text="7"
-                            android:id="@+id/consumer_count_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="fill_horizontal"
-                            android:textColor="@color/primary_dark_material_dark"
-                            android:textSize="@dimen/abc_text_size_headline_material" />
-                        <Button
-                            android:text="Manage"
-                            android:layout_width="match_parent"
-                            android:layout_height="42dp"
-                            android:id="@+id/consumers_button"
-                            android:layout_marginLeft="0dp"
-                            android:layout_marginRight="0dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_weight="0" />
-                    </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-    </LinearLayout>
-<!-- The navigation drawer -->
-    <RelativeLayout
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:id="@+id/drawer"
-        android:layout_gravity="start">
-    <!-- List of Actions (pages) -->
-        <ListView
-            android:id="@+id/drawer_list"
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-            android:choiceMode="singleChoice"
-            android:background="#ffffffff" />
-    </RelativeLayout>
+    </ScrollView>
 </android.support.v4.widget.DrawerLayout>

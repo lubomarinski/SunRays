@@ -24,8 +24,7 @@ namespace NasaApp
             GetObject((int)Intent.GetLongExtra("netID", -1));
             SetContentView(Resource.Layout.ConsumerList);
             adapter = new ConsumerListAdapter(this, (int)Intent.GetLongExtra("netID", -1));
-            var listView = FindViewById<ListView>(Resource.Id.listView1);
-            listView.Adapter = adapter;
+            adapter.UpdateAdapter();
             var button = FindViewById<ImageButton>(Resource.Id.button1);
             button.Click += AddConsumer;
             // Create your application here
@@ -44,23 +43,15 @@ namespace NasaApp
             var localView = this.LayoutInflater.Inflate(Resource.Layout.ConsumerListDialog, null);
             var consumerName = localView.FindViewById<TextView>(Resource.Id.textInputEditText1);
             var energyConsumation = localView.FindViewById<TextView>(Resource.Id.textInputEditText2);
-            var seekBar = localView.FindViewById<SeekBar>(Resource.Id.seekBar1);
-            var usageText = localView.FindViewById<TextView>(Resource.Id.usageText);
+            var usageHours = localView.FindViewById<TextView>(Resource.Id.usageHours);
             var countText = localView.FindViewById<TextView>(Resource.Id.numberConsumers);
-            seekBar.ProgressChanged += (object s, SeekBar.ProgressChangedEventArgs ea) =>
-            {
-                if (ea.FromUser)
-                {
-                    usageText.Text = string.Format("Usage Hours:{0}", ea.Progress / 2.0);
-                    consumer.UsageHours = ea.Progress / 2.0;
-                }
-            };
             alertDialog.SetNeutralButton("OK", async delegate
             {
                 bool success = true;
                 try { consumer.Name = consumerName.Text; } catch (Exception) { success = false; }
                 try { consumer.EnergyConsumation = double.Parse(energyConsumation.Text) / 1000.0; } catch (Exception) { success = false; }
                 try { consumer.Count = int.Parse(countText.Text); } catch (Exception) { success = false; }
+                try { if ((int.Parse(usageHours.Text) > 0) && (int.Parse(usageHours.Text) <= 24)) consumer.UsageHours = int.Parse(usageHours.Text); else success = false; } catch (Exception) { success = false; }
                 if (success) await adapter.AddConsumer(consumer);
                 alertDialog.Dispose();
 

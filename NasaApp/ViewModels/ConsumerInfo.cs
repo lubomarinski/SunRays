@@ -17,9 +17,12 @@ namespace NasaApp.ViewModels
             ConsumerCount = consumerCount;
         }
 
-        public static async Task<ConsumerInfo> FromDBAsync(DatabaseHelper db)
+        public static async Task<ConsumerInfo> FromDBAsync(DatabaseHelper db,int networkID)
         {
-            IEnumerable<Consumer> consumers = await db.Consumers.SelectAllAsync();
+            List<Consumer> consumers = (await db.Consumers
+                .SelectAllAsync())
+                .Where(x => x.NetworkID == networkID)
+                .ToList();
             return new ConsumerInfo(
                 totalUsage: consumers.Sum(x => x.EnergyConsumation * x.Count),
                 consumerCount: consumers.Select(x => x.Count).Sum()

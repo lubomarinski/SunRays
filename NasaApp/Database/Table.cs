@@ -63,28 +63,17 @@ namespace NasaApp.Database
             });
         }
 
-        private Task<SQLiteDatabase> GetWritableDBAsync()
+        private SQLiteDatabase WritableDB { get => dbHelper.WritableDatabase; }
+        private SQLiteDatabase ReadableDB { get => dbHelper.ReadableDatabase; }
+
+        public void Create(SQLiteDatabase db)
         {
-            return Task.Run(delegate
-            {
-                return dbHelper.WritableDatabase;
-            });
+            db.ExecSQL(createQuery);
         }
 
-        public Task CreateAsync()
+        public void Drop(SQLiteDatabase db)
         {
-            return GetWritableDBAsync().ContinueWith(dbTask =>
-            {
-                dbTask.Result.ExecSQL(createQuery);
-            });
-        }
-
-        public Task DropAsync()
-        {
-            return GetWritableDBAsync().ContinueWith(dbTask =>
-            {
-                dbTask.Result.ExecSQL(dropQuery);
-            });
+            db.ExecSQL(dropQuery);
         }
 
         public virtual Task<T> SelectByIdAsync(long id)
@@ -113,25 +102,25 @@ namespace NasaApp.Database
 
         public virtual Task<long> InsertAsync(T item)
         {
-            return GetWritableDBAsync().ContinueWith(dbTask =>
+            return Task.Run(delegate
             {
-                return dbTask.Result.InsertOrThrow(TableName, null, Infuse(item));
+                return WritableDB.InsertOrThrow(TableName, null, Infuse(item));
             });
         }
 
         public virtual Task UpdateAsync(T item)
         {
-            return GetWritableDBAsync().ContinueWith(dbTask =>
+            return Task.Run(delegate
             {
-                return dbTask.Result.Update(TableName, Infuse(item), $"ID={SelectID(item)}", null);
+                return WritableDB.Update(TableName, Infuse(item), $"ID={SelectID(item)}", null);
             });
         }
 
         public virtual Task DeleteAsync(T item)
         {
-            return GetWritableDBAsync().ContinueWith(dbTask =>
+            return Task.Run(delegate
             {
-                var writableDB = dbTask.Result;
+                SQLiteDatabase writableDB = WritableDB;
                 long id = SelectID(item);
                 string testQuery = $"SELECT 1 FROM {TableName} WHERE ID={id}";
                 if (writableDB.RawQuery(testQuery, null).MoveToNext())

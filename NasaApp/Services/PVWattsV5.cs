@@ -87,13 +87,33 @@ namespace NasaApp.Services
             double azmuth,
             GeoCoords coords)
         {
+            try
+            {
+                return await GetSystemInfoAsync("intl", systemCapacity, moduleType, arrayType, systemLosses, tilt, azmuth, coords);
+            }
+            catch (Exception e)
+            {
+                return await GetSystemInfoAsync("tmy3", systemCapacity, moduleType, arrayType, systemLosses, tilt, azmuth, coords);
+            }
+        }
+
+        private async Task<SystemInfo> GetSystemInfoAsync(
+            string dataset,
+            double systemCapacity,
+            PanelModuleType moduleType,
+            PanelArrayType arrayType,
+            double systemLosses,
+            double? tilt,
+            double azmuth,
+            GeoCoords coords)
+        {
             using (var client = new HttpClient())
             {
                 string query = CreateQueryParams(new Params
                 {
                     { "api_key", apiKey },
                     { "timeframe", "hourly" },
-                    { "dataset", "intl" },
+                    { "dataset", dataset },
                     { "system_capacity", systemCapacity.ToString() },
                     { "module_type", ((int)moduleType).ToString() },
                     { "losses", systemLosses.ToString() },
@@ -101,7 +121,8 @@ namespace NasaApp.Services
                     { "tilt", tilt.ToString() },
                     { "azimuth", azmuth.ToString() },
                     { "lat", coords.Latitude.ToString() },
-                    { "lon", coords.Longitude.ToString() }
+                    { "lon", coords.Longitude.ToString() },
+                    { "radius", "0" }
                 });
 
                 string requestUrl = $"{BaseUrl}?{query}";

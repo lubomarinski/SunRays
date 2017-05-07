@@ -12,7 +12,7 @@
         android:layout_marginLeft="8pt"
         android:layout_marginRight="8pt" />
     <TextView
-        android:text="Location:(0,0)"
+        android:text="Location:(45,45)"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/locationText"

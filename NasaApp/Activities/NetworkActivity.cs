@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Android;
 using Android.App;
@@ -9,10 +10,12 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.Design.Widget;
 using Android.Support.V4.App;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using NasaApp.Adaptors;
@@ -66,8 +69,10 @@ namespace NasaApp
             SetContentView(Resource.Layout.Network);
             FindViewById<Button>(Resource.Id.modules_button).Click += ToPanelList;
             FindViewById<Button>(Resource.Id.consumers_button).Click += ToConsomerList;
+            // Start the initialization process.
+            BeginInitialize();
         }
-        private void ToPanelList(object sender,EventArgs e)
+        private void ToPanelList(object sender, EventArgs e)
         {
             var nextActivity = new Intent(this, typeof(PanelListActivity));
             nextActivity.PutExtra("netID", Intent.GetLongExtra(EXTRA_NETWORK_ID, -1));
@@ -84,8 +89,6 @@ namespace NasaApp
         protected override void OnResume()
         {
             base.OnResume();
-            // Start the initialization process.
-            BeginInitialize();
         }
 
         protected override void OnRestart()
@@ -116,35 +119,17 @@ namespace NasaApp
                 throw new InvalidProgramException();
             }
 
-            // Setup the drawer.
-            InitializeDrawer();
-            // Setup the network card
-            InitializeCards();
             // Get the weather service.
             weatherProvider = ServiceManager.Resolve<IWeatherProvider>();
             // Get the calculator service.
             powerCalculator = ServiceManager.Resolve<IPowerCalculator>();
             // Initialize the PVWatts Client.
-            pvWattsApiClient = new PVWattsV5ApiClient(apiKey: "o1q77053uqJE20N3dhWPdQGqrhFDfZoSWMoArikE");
-        }
+            pvWattsApiClient = new PVWattsV5ApiClient(apiKey: Secrets.PVWattsApiKey);
 
-        private void InitializeDrawer()
-        {
-            // Enable the hamburger icon.
-            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            DrawerLayout drawerLayout = FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
-            // Create the drawer toggle.
-            var drawerToggle = new Android.Support.V7.App.ActionBarDrawerToggle(this, drawerLayout, 0, 0);
-            drawerToggle.DrawerIndicatorEnabled = true;
-            drawerToggle.SyncState();
-            // Set the drawer list adapter.
-            ListView drawerListView = FindViewById<ListView>(Resource.Id.drawer_list);
-            drawerListView.Adapter = new NavigationListAdapter(this, new[] {
-                new NavigationItem(title: "PV Panels", onClick: v => { }),
-                new NavigationItem(title: "Consumers", onClick: v => { })
-            });
+            // Setup the network card
+            InitializeCards();
         }
-
+        
         private void InitializeCards()
         {
             UpdateLocationCard(new GeoCoords
@@ -161,159 +146,247 @@ namespace NasaApp
             {
                 if (task.Exception != null)
                 {
-                    throw task.Exception;
+                    task.Exception.ThrowUnhandled();
                 }
             });
         }
 
+        private Task<bool> CheckInternetConnectionAsync()
+        {
+            return Task.Run(delegate
+            {
+                try
+                {
+                    var ipAddr = Java.Net.InetAddress.GetByName("google.com");
+                    return !ipAddr.Equals("");
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            });
+        }
+
+        private void CallOnReconnect(Action action)
+        {
+            Action doCheck = null;
+            doCheck = async delegate
+            {
+                bool hasReconnected = await CheckInternetConnectionAsync();
+                if (hasReconnected)
+                {
+                    RunOnUiThread(action);
+                }
+                else
+                {
+                    RunOnUiThread(async delegate
+                    {
+                        await Task.Delay(5000); // Check again after 5 seconds.
+                        doCheck();
+                    });
+                }
+            };
+            RunOnUiThread(doCheck);
+        }
+
         private async Task UpdateCardsAsync()
         {
-            GeoCoords geoCoords = new GeoCoords { Latitude = solarNetwork.Latitude, Longitude = solarNetwork.Longtitude };
+            try
+            {
+                bool hasConnection = await CheckInternetConnectionAsync();
+                if (!hasConnection)
+                {
+                    Snackbar.Make(FindViewById(Resource.Id.main_content), "No internet connection.", Snackbar.LengthShort).Show();
+                    CallOnReconnect(async delegate { await UpdateCardsAsync(); });
+                    return;
+                }
 
-            PVSystemInfo systemInfo = await PVSystemInfo.FromDBAsync(db, solarNetwork.ID);
-            UpdatePVSystemInfo(systemInfo);
+                GeoCoords geoCoords = new GeoCoords { Latitude = solarNetwork.Latitude, Longitude = solarNetwork.Longtitude };
 
-            WeatherInfo weatherInfo = await weatherProvider.GetWeatherInfoAsync(geoCoords);
-            UpdateWeatherInfoView(weatherInfo);
+                PVSystemInfo systemInfo = await PVSystemInfo.FromDBAsync(db, solarNetwork.ID);
+                UpdatePVSystemInfo(systemInfo);
 
-            ConsumerInfo consumerInfo = await ConsumerInfo.FromDBAsync(db);
-            UpdateConsumerInfo(consumerInfo);
+                WeatherInfo weatherInfo = await weatherProvider.GetWeatherInfoAsync(geoCoords);
+                UpdateWeatherInfoView(weatherInfo);
 
-            SystemSummary arraySummary = await GetArraySummaryAsync(weatherInfo);
-            UpdateArraySummary(arraySummary, consumerInfo);
+                ConsumerInfo consumerInfo = await ConsumerInfo.FromDBAsync(db, solarNetwork.ID);
+                UpdateConsumerInfo(consumerInfo);
+
+                SystemSummary arraySummary = await GetArraySummaryAsync(weatherInfo);
+                UpdateArraySummary(arraySummary, consumerInfo);
+            }
+            catch (Exception e)
+            {
+                Log.Error(ToString(), e.ToString());
+            }
         }
 
         private void UpdateLocationCard(GeoCoords? geoCoords)
         {
-            if (!Looper.MainLooper.IsCurrentThread)
+            try
             {
-                RunOnUiThread(delegate { UpdateLocationCard(geoCoords); });
-                return;
-            }
+                if (!Looper.MainLooper.IsCurrentThread)
+                {
+                    RunOnUiThread(delegate { UpdateLocationCard(geoCoords); });
+                    return;
+                }
 
-            View card = FindViewById<CardView>(Resource.Id.location_card);
-            TextView latitudeText = card.FindViewById<TextView>(Resource.Id.latitude_text);
-            TextView longtitudeText = card.FindViewById<TextView>(Resource.Id.longtitude_text);
+                View card = FindViewById<CardView>(Resource.Id.location_card);
+                TextView latitudeText = card.FindViewById<TextView>(Resource.Id.latitude_text);
+                TextView longtitudeText = card.FindViewById<TextView>(Resource.Id.longtitude_text);
 
-            if (!geoCoords.HasValue)
-            {
-                latitudeText.Text = "...";
-                longtitudeText.Text = "...";
+                if (!geoCoords.HasValue)
+                {
+                    latitudeText.Text = "...";
+                    longtitudeText.Text = "...";
+                }
+                else
+                {
+                    latitudeText.Text = geoCoords.Value.Latitude.ToString("0.0000");
+                    longtitudeText.Text = geoCoords.Value.Longitude.ToString("0.0000");
+                }
             }
-            else
+            catch (Exception e)
             {
-                latitudeText.Text = geoCoords.Value.Latitude.ToString("0.0000");
-                longtitudeText.Text = geoCoords.Value.Longitude.ToString("0.0000");
+                Log.Error(ToString(), e.ToString());
             }
         }
 
         private void UpdateWeatherInfoView(WeatherInfo weatherInfo = null)
         {
-            if (!Looper.MainLooper.IsCurrentThread)
+            try
             {
-                RunOnUiThread(delegate { UpdateWeatherInfoView(weatherInfo); });
-                return;
-            }
+                if (!Looper.MainLooper.IsCurrentThread)
+                {
+                    RunOnUiThread(delegate { UpdateWeatherInfoView(weatherInfo); });
+                    return;
+                }
 
-            TextView cloudsText = FindViewById<TextView>(Resource.Id.clouds_text);
-            TextView tempText = FindViewById<TextView>(Resource.Id.temp_text);
+                TextView cloudsText = FindViewById<TextView>(Resource.Id.clouds_text);
+                TextView tempText = FindViewById<TextView>(Resource.Id.temp_text);
 
-            if (weatherInfo == null)
+                if (weatherInfo == null)
+                {
+                    cloudsText.Text = "...";
+                    tempText.Text = "...";
+                }
+                else
+                {
+                    cloudsText.Text = weatherInfo.Clouds.HasValue
+                        ? weatherInfo.Clouds.Value.ToString() + "%"
+                        : "N/A";
+                    tempText.Text = weatherInfo.Temperature.HasValue
+                        ? (weatherInfo.Temperature.Value - 273.15).ToString() + "°C"
+                        : "N/A";
+                }
+            } 
+            catch (Exception e)
             {
-                cloudsText.Text = "...";
-                tempText.Text = "...";
-            }
-            else
-            {
-                cloudsText.Text = weatherInfo.Clouds.HasValue
-                    ? weatherInfo.Clouds.Value.ToString() + "%"
-                    : "N/A";
-                tempText.Text = weatherInfo.Temperature.HasValue
-                    ? (weatherInfo.Temperature.Value - 273.15).ToString() + "°C"
-                    : "N/A";
+                Log.Error(ToString(), e.ToString());
             }
         }
 
         private void UpdatePVSystemInfo(PVSystemInfo systemInfo)
         {
-            if (!Looper.MainLooper.IsCurrentThread)
+            try
             {
-                RunOnUiThread(delegate { UpdatePVSystemInfo(systemInfo); });
-                return;
-            }
+                if (!Looper.MainLooper.IsCurrentThread)
+                {
+                    RunOnUiThread(delegate { UpdatePVSystemInfo(systemInfo); });
+                    return;
+                }
 
-            TextView systemSizeText = FindViewById<TextView>(Resource.Id.system_size_text);
-            TextView moduleCountText = FindViewById<TextView>(Resource.Id.module_count_text);
+                TextView systemSizeText = FindViewById<TextView>(Resource.Id.system_size_text);
+                TextView moduleCountText = FindViewById<TextView>(Resource.Id.module_count_text);
 
-            if (systemInfo != null)
-            {
-                systemSizeText.Text = $"{systemInfo.SystemSize} kW";
-                moduleCountText.Text = $"{systemInfo.PanelCount}";
+                if (systemInfo != null)
+                {
+                    systemSizeText.Text = $"{systemInfo.SystemSize} kW/h";
+                    moduleCountText.Text = $"{systemInfo.PanelCount}";
+                }
+                else
+                {
+                    systemSizeText.Text = "...";
+                    moduleCountText.Text = "...";
+                }
             }
-            else
+            catch (Exception e)
             {
-                systemSizeText.Text = "...";
-                moduleCountText.Text = "...";
+                Log.Error(ToString(), e.ToString());
             }
         }
 
         private void UpdateArraySummary(SystemSummary systemInfo, ConsumerInfo consumerInfo = null)
         {
-            View summaryCard = FindViewById<View>(Resource.Id.production_card_bg_root);
-
-            TextView productionHourlyText = FindViewById<TextView>(Resource.Id.production_per_hour);
-            TextView productionTodayText = FindViewById<TextView>(Resource.Id.production_daily);
-            TextView productionMonthlyText = FindViewById<TextView>(Resource.Id.production_per_month);
-            TextView productionAnnualText = FindViewById<TextView>(Resource.Id.production_per_year);
-
-            if (systemInfo != null)
+            try
             {
-                productionHourlyText.Text = systemInfo.HourlyDCArrayOutput.ToString("0.00") + " kW";
-                productionTodayText.Text = systemInfo.TodayDCArrayOutput.ToString("0.00") + " kW";
-                productionMonthlyText.Text = systemInfo.MonthlyDCArrayOutput.ToString("0.00") + " kW";
-                productionAnnualText.Text = systemInfo.AnnualDCArrayOutput.ToString("0.00") + " kW";
+                View summaryCard = FindViewById<View>(Resource.Id.production_card_bg_root);
 
-                if (consumerInfo != null)
+                TextView productionHourlyText = FindViewById<TextView>(Resource.Id.production_per_hour);
+                TextView productionTodayText = FindViewById<TextView>(Resource.Id.production_daily);
+                TextView productionMonthlyText = FindViewById<TextView>(Resource.Id.production_per_month);
+                TextView productionAnnualText = FindViewById<TextView>(Resource.Id.production_per_year);
+
+                if (systemInfo != null)
                 {
-                    if (consumerInfo.TotalUsage >= systemInfo.TodayDCArrayOutput)
+                    productionHourlyText.Text = systemInfo.HourlyDCArrayOutput.ToString("0.00") + " kW";
+                    productionTodayText.Text = systemInfo.TodayDCArrayOutput.ToString("0.00") + " kW";
+                    productionMonthlyText.Text = systemInfo.MonthlyDCArrayOutput.ToString("0.00") + " kW";
+                    productionAnnualText.Text = systemInfo.AnnualDCArrayOutput.ToString("0.00") + " kW";
+
+                    if (consumerInfo != null)
                     {
-                        summaryCard.SetBackgroundResource(Resource.Color.md_red_100);
-                    }
-                    else
-                    {
-                        summaryCard.SetBackgroundResource(Resource.Color.md_green_100);
+                        if (consumerInfo.TotalUsage >= systemInfo.TodayDCArrayOutput)
+                        {
+                            summaryCard.SetBackgroundResource(Resource.Color.md_red_100);
+                        }
+                        else
+                        {
+                            summaryCard.SetBackgroundResource(Resource.Color.md_green_100);
+                        }
                     }
                 }
+                else
+                {
+                    productionHourlyText.Text = "...";
+                    productionTodayText.Text = "...";
+                    productionMonthlyText.Text = "...";
+                    productionAnnualText.Text = "...";
+                }
             }
-            else
+            catch (Exception e)
             {
-                productionHourlyText.Text = "...";
-                productionTodayText.Text = "...";
-                productionMonthlyText.Text = "...";
-                productionAnnualText.Text = "...";
+                Log.Error(ToString(), e.ToString());
             }
         }
 
         private void UpdateConsumerInfo(ConsumerInfo consumerInfo)
         {
-            if (!Looper.MainLooper.IsCurrentThread)
+            try
             {
-                RunOnUiThread(delegate { UpdateConsumerInfo(consumerInfo); });
-                return;
-            }
+                if (!Looper.MainLooper.IsCurrentThread)
+                {
+                    RunOnUiThread(delegate { UpdateConsumerInfo(consumerInfo); });
+                    return;
+                }
 
-            TextView totalUsageText = FindViewById<TextView>(Resource.Id.total_energy_usage_text);
-            TextView consumerCountText = FindViewById<TextView>(Resource.Id.consumer_count_text);
+                TextView totalUsageText = FindViewById<TextView>(Resource.Id.total_energy_usage_text);
+                TextView consumerCountText = FindViewById<TextView>(Resource.Id.consumer_count_text);
 
-            if (consumerInfo != null)
-            {
-                totalUsageText.Text = $"{consumerInfo.TotalUsage.ToString("0.00")} kW/h";
-                consumerCountText.Text = $"{consumerInfo.ConsumerCount}";
+                if (consumerInfo != null)
+                {
+                    totalUsageText.Text = $"{consumerInfo.TotalUsage.ToString("0.00")} kW/h";
+                    consumerCountText.Text = $"{consumerInfo.ConsumerCount}";
+                }
+                else
+                {
+                    totalUsageText.Text = "...";
+                    consumerCountText.Text = "...";
+                }
             }
-            else
+            catch (Exception e)
             {
-                totalUsageText.Text = "...";
-                consumerCountText.Text = "...";
+                Log.Error(ToString(), e.ToString());
             }
         }
 

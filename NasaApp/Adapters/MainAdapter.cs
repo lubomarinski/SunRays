@@ -28,6 +28,34 @@ namespace NasaApp.Adapters
             LoadNetworks();
         }
 
+        public void UpdateAdapter()
+        {
+            activity.FindViewById<ListView>(Resource.Id.listView1).Adapter = this;
+            var emptyText = activity.FindViewById<TextView>(Resource.Id.emptyText);
+            if (Count == 0)
+            {
+                emptyText.Visibility = ViewStates.Visible;
+            }
+            else
+            {
+                emptyText.Visibility = ViewStates.Gone;
+            }
+        }
+
+        public void UpdateAdapter(View view)
+        {
+            view.FindViewById<ListView>(Resource.Id.listView1).Adapter = this;
+            var emptyText = view.FindViewById<TextView>(Resource.Id.emptyText);
+            if (Count == 0)
+            {
+                emptyText.Visibility = ViewStates.Visible;
+            }
+            else
+            {
+                emptyText.Visibility = ViewStates.Gone;
+            }
+        }
+
         private async Task DeleteNetwork(Network net)
         {
             netList.Remove(net);
@@ -40,7 +68,7 @@ namespace NasaApp.Adapters
             {
                 await db.Consumers.DeleteAsync(consumer);
             }
-            activity.FindViewById<ListView>(Resource.Id.listView1).Adapter = this;
+            UpdateAdapter();
         }
 
         public async Task AddNetwork(string name, GeoCoords coords)
@@ -52,7 +80,7 @@ namespace NasaApp.Adapters
             sn.Latitude = coords.Latitude;
             net.ID = (int)await db.SolarNetworks.InsertAsync(sn);
             netList.Add(net);
-            activity.FindViewById<ListView>(Resource.Id.listView1).Adapter = this;
+            UpdateAdapter();
         }
 
         public override int Count
@@ -67,23 +95,23 @@ namespace NasaApp.Adapters
             foreach (var sn in snl)
             {
                 Network net = new Network(sn);
-                List<Panel> panels = (await db.Panels.SelectAllAsync()).Where(x => x.ID == net.ID).ToList();
+                List<Panel> panels = (await db.Panels.SelectAllAsync()).Where(x => x.NetworkID == net.ID).ToList();
                 net.Panels = panels.Sum(x => x.Count);
                 net.PanelsEnergy = panels.Sum(x => 
                 {
                     return x.PowerRating * x.Count;
                 });
 
-                List<Consumer> consumers = (await db.Consumers.SelectAllAsync()).Where(x => x.ID == net.ID).ToList();
+                List<Consumer> consumers = (await db.Consumers.SelectAllAsync()).Where(x => x.NetworkID == net.ID).ToList();
                 net.Consumers = consumers.Sum(x => x.Count);
                 net.ConsumersEnergy = consumers.Sum(x =>
                 {
-                    return x.EnergyConsumation * x.Count * x.UsageHours / 24.0;
+                    return x.EnergyConsumation * x.Count * x.UsageHours;
                 });
 
                 netList.Add(net);
             }
-            activity.FindViewById<ListView>(Resource.Id.listView1).Adapter = this;
+            UpdateAdapter();
         }
 
         public override Java.Lang.Object GetItem(int index)

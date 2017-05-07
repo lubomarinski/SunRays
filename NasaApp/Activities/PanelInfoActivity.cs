@@ -8,6 +8,11 @@ using NasaApp.Database;
 using NasaApp.Models;
 using Android.Support.V7.Widget;
 using Android.Views;
+using NasaApp.Services;
+using System;
+using NasaApp.Utilities;
+using NasaApp.ViewModels;
+using System.Threading.Tasks;
 
 namespace NasaApp
 {
@@ -17,6 +22,10 @@ namespace NasaApp
         private DatabaseHelper db;
         private Panel panel;
         private SolarNetwork sn;
+
+        IPowerCalculator powerCalc = ServiceManager.Resolve<IPowerCalculator>();
+        PVWattsV5ApiClient pvWattsApiClient = new PVWattsV5ApiClient(apiKey: Secrets.PVWattsApiKey);
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -32,6 +41,8 @@ namespace NasaApp
             sn = await db.SolarNetworks.SelectByIdAsync(ID1);
             panel = await db.Panels.SelectByIdAsync(ID2);
             SupportActionBar.Title = sn.Name + " - Panels - Info";
+            UpdateTiltAngle();
+            UpdateSummaryAsync();
             var PanelCount = FindViewById<TextView>(Resource.Id.panelCount);
             PanelCount.Text = panel.Count.ToString();
             var ppr = FindViewById<TextView>(Resource.Id.ppr);
@@ -41,20 +52,82 @@ namespace NasaApp
             var pmt = FindViewById<TextView>(Resource.Id.pmt);
             pmt.Text = Resources.GetStringArray(Resource.Array.module_type_array)[(int)panel.ModuleType];
             var cardview = FindViewById<CardView>(Resource.Id.itemCardView);
-            var lineView = FindViewById<View>(Resource.Id.lineView);
-            lineView.Rotation = (float)panel.TiltAngle.Value;
-            var deg = FindViewById<TextView>(Resource.Id.deg);
-            deg.Text = ((float)panel.TiltAngle.Value).ToString() + "°";
             var pat = FindViewById<TextView>(Resource.Id.pat);
             pat.Text = Resources.GetStringArray(Resource.Array.array_type_array)[(int)panel.ArrayType];
-            var dpr = FindViewById<TextView>(Resource.Id.dpr);
-            dpr.Text = (panel.PowerRating * panel.Count * 11.8).ToString() + " kW";
-            var mpr = FindViewById<TextView>(Resource.Id.mpr);
-            mpr.Text = (panel.PowerRating * panel.Count * 11.8 * 30.5).ToString() + " kW";
-            var ypr = FindViewById<TextView>(Resource.Id.ypr);
-            ypr.Text = (panel.PowerRating * panel.Count * 11.8 * 30.5 * 12).ToString() + " kW";
             var systemLosses = FindViewById<TextView>(Resource.Id.systemLosses);
             systemLosses.Text = panel.SystemLosses.ToString() + "%";
+        }
+
+        private void UpdateTiltAngle()
+        {
+            var lineView = FindViewById<View>(Resource.Id.lineView);
+            var deg = FindViewById<TextView>(Resource.Id.deg);
+            var zenithText = FindViewById<TextView>(Resource.Id.zenith);
+
+            double zenith = GetZenith();
+            double elevation = GetElevation();
+            zenithText.Text = (Math.Round(zenith)).ToString() + "°";
+
+            switch (panel.ArrayType)
+            {
+                case PanelArrayType.FixedOpenRack:
+                case PanelArrayType.FixedRoofMounted:
+                    lineView.Rotation = (float)panel.TiltAngle.Value;
+                    deg.Text = (Math.Round(panel.TiltAngle.Value)).ToString() + "°";
+                    break;
+                case PanelArrayType.OneAxis:
+                case PanelArrayType.OneAxisBacktracking:
+                case PanelArrayType.TwoAxis:
+                    if (elevation < 180.0 && elevation > 0.0)
+                    {
+                        lineView.Rotation = (float)elevation;
+                        deg.Text = Math.Round(elevation).ToString() + "°";
+                    }
+                    else
+                    {
+                        lineView.Rotation = 90f;
+                        deg.Text = "(No Sun)";
+                    }
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+
+        private async Task UpdateSummaryAsync()
+        {
+            var estDaily = FindViewById<TextView>(Resource.Id.estimated_daily);
+            var estMonthly = FindViewById<TextView>(Resource.Id.estimated_monthly);
+            var estAnnual = FindViewById<TextView>(Resource.Id.estimated_annual);
+
+            PVSystemInfo systemInfo = await PVSystemInfo.FromDBAsync(db, sn.ID);
+            var panelSummary = await systemInfo.GetPanelSummaryAsync(
+                panel, powerCalc, pvWattsApiClient, 
+                new GeoCoords(sn.Latitude, sn.Longtitude), 
+                GetZenith(), DateTime.Now, GetTimeZoneOffset(), 
+                tempCelsius: 25.0);
+
+            estDaily.Text = (panelSummary.TodayDCArrayOutput).ToString("0.00") + "kW";
+            estMonthly.Text = (panelSummary.MonthlyDCArrayOutput).ToString("0.00") + "kW";
+            estAnnual.Text = (panelSummary.AnnualDCArrayOutput).ToString("0.00") + "kW";
+        }
+
+        private double GetTimeZoneOffset()
+        {
+            TimeZone timeZone = TimeZone.CurrentTimeZone;
+            TimeSpan timeZoneOffset = timeZone.GetUtcOffset(DateTime.Now);
+            return timeZoneOffset.Hours + timeZoneOffset.Minutes / 30.0;
+        }
+
+        private double GetZenith()
+        {
+            return powerCalc.CalculateZenith(new GeoCoords(sn.Latitude, sn.Longtitude), DateTime.Now, GetTimeZoneOffset());
+        }
+
+        private double GetElevation()
+        {
+            return powerCalc.CalculateElevation(new GeoCoords(sn.Latitude, sn.Longtitude), DateTime.Now, GetTimeZoneOffset());
         }
     }
 }

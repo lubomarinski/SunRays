@@ -6,6 +6,8 @@ namespace NasaApp.Services
     public interface IPowerCalculator
     {
         double CalculateModulePowerLoss(PanelModuleType moduleType, double temperatureCelsius);
-        double CalculateAzmuth(GeoCoords geoCoords, DateTime dateTime, double timeZone);
+        double CalculateAizmuth(GeoCoords geoCoords, DateTime dateTime, double timeZone);
+        double CalculateZenith(GeoCoords geoCoords, DateTime dateTime, double timeZone);
+        double CalculateElevation(GeoCoords geoCoords, DateTime dateTime, double timeZone);
     }
 }

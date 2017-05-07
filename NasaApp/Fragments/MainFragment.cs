@@ -32,11 +32,9 @@ namespace NasaApp.Fragments
             View view = inflater.Inflate(Resource.Layout.MainFragment, container, false);
             
             adapter = new MainAdapter(Activity);
-            var listView = view.FindViewById<ListView>(Resource.Id.listView1);
-            listView.Adapter = adapter;
+            adapter.UpdateAdapter(view);
             var button = view.FindViewById<ImageButton>(Resource.Id.button1);
             button.Click += AddNetwork;
-
             return view;
         }
 

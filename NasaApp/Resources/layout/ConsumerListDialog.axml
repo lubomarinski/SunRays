@@ -35,23 +35,22 @@
         android:layout_marginRight="8pt"
         android:inputType="numberDecimal" />
     <TextView
-        android:text="Usage Hours: 0"
+        android:text="Usage Hours"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/usageText"
+        android:id="@+id/textView2"
         android:layout_marginLeft="10pt"
         android:layout_marginRight="10pt"
-        android:textSize="8pt"
         android:layout_marginTop="2pt" />
-    <SeekBar
+    <android.support.design.widget.TextInputEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar1"
-        android:max="48"
-        android:progress="0"
+        android:id="@+id/usageHours"
         android:layout_marginLeft="8pt"
         android:layout_marginRight="8pt"
-        android:layout_marginBottom="3pt" />
+        android:hint="Usage Hours"
+        android:inputType="numberDecimal"
+        android:text="1" />
     <TextView
         android:text="Number of Consumers"
         android:layout_width="match_parent"

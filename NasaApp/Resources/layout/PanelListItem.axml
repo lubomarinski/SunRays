@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_width="80pt"
-                android:layout_marginTop="2pt">
+                android:layout_marginTop="4pt">
                 <TextView
                     android:text="Tilt Angle"
                     android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                 android:orientation="vertical"
                 android:layout_gravity="fill_horizontal"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="2pt">
+                android:layout_marginTop="20pt">
                 <TextView
                     android:text="Panel Module Type"
                     android:layout_width="wrap_content"

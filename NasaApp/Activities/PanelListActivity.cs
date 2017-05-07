@@ -26,8 +26,7 @@ namespace NasaApp
             GetObject((int)Intent.GetLongExtra("netID", -1));
             SetContentView(Resource.Layout.PanelList);
             adapter = new PanelListAdapter(this, (int)Intent.GetLongExtra("netID", -1));
-            var listView = FindViewById<ListView>(Resource.Id.listView1);
-            listView.Adapter = adapter;
+            adapter.UpdateAdapter();
             var button = FindViewById<ImageButton>(Resource.Id.button1);
             button.Click += AddPanel;
             // Create your application here

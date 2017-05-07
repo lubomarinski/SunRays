@@ -19,7 +19,6 @@ namespace NasaApp.Models
 
     public enum PanelModuleType
     {
-        // Do NOT change these values. See https://developer.nrel.gov/docs/solar/pvwatts-v5/#output-fields
         Monocrystalline = 0,
         Polycrystalline = 1,
         ThinFilm = 2,
@@ -27,7 +26,6 @@ namespace NasaApp.Models
 
     public enum PanelArrayType
     {
-        // Do NOT change these values. See https://developer.nrel.gov/docs/solar/pvwatts-v5/#output-fields
         FixedOpenRack = 0,
         FixedRoofMounted = 1,
         OneAxis = 2,

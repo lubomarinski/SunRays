@@ -29,12 +29,24 @@ namespace NasaApp.Adapters
             db = new DatabaseHelper(activity);
             LoadConsumers();
         }
-
+        public void UpdateAdapter()
+        {
+            activity.FindViewById<ListView>(Resource.Id.listView1).Adapter = this;
+            var emptyText = activity.FindViewById<TextView>(Resource.Id.emptyText);
+            if (Count == 0)
+            {
+                emptyText.Visibility = ViewStates.Visible;
+            }
+            else
+            {
+                emptyText.Visibility = ViewStates.Gone;
+            }
+        }
         private async Task DeleteConsumer(ConsumerListItem consumer)
         {
             consumerList.Remove(consumer);
             await db.Consumers.DeleteAsync(await db.Consumers.SelectByIdAsync(consumer.ID));
-            activity.FindViewById<ListView>(Resource.Id.listView1).Adapter = this;
+            UpdateAdapter();
         }
 
         public async Task AddConsumer(Consumer consumer)
@@ -42,7 +54,7 @@ namespace NasaApp.Adapters
             ConsumerListItem cli = new ConsumerListItem(consumer);
             cli.ID = (int)await db.Consumers.InsertAsync(consumer);
             consumerList.Add(cli);
-            activity.FindViewById<ListView>(Resource.Id.listView1).Adapter = this;
+            UpdateAdapter();
         }
 
         public override int Count
@@ -61,7 +73,7 @@ namespace NasaApp.Adapters
                     consumerList.Add(cli);
                 }
             }
-            activity.FindViewById<ListView>(Resource.Id.listView1).Adapter = this;
+            UpdateAdapter();
         }
 
         public override Java.Lang.Object GetItem(int index)
