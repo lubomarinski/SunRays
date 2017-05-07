@@ -5,4 +5,4 @@ By marking your position on the map and adding your photovoltaic modules to the 
 
 License: https://opensource.org/licenses/MIT
 
-APK (for Lollipop or higher): https://drive.google.com/open?id=0B_z8IdXzb45QU0NB...
+APK (for Lollipop or higher): https://drive.google.com/open?id=0B_z8IdXzb45QU0NBajhJU2hIbDQ
