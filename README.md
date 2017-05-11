@@ -6,3 +6,11 @@ By marking your position on the map and adding your photovoltaic modules to the 
 License: https://opensource.org/licenses/MIT
 
 APK (for Lollipop or higher): https://drive.google.com/open?id=0B_z8IdXzb45QU0NBajhJU2hIbDQ
+
+# Resources:
+https://github.com/xeqlol/SolarPositionAlgorithm.git
+https://developer.nrel.gov/
+https://en.wikipedia.org/wiki/Solar_panel
+http://openweathermap.org/api
+https://developers.google.com/maps/android/
+https://github.com/paladin324/sunrays
