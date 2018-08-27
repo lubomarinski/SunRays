@@ -1,4 +1,5 @@
 # SunRays - NASA Space Apps Challenge 2017 Project
+# SunRays won the Local Winner prize for Best Use of Data in the NASA Space Apps Challenge.
 
 ### Contributers - veselink1, lubomarinski
 
