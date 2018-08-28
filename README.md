@@ -1,7 +1,7 @@
 # SunRays - NASA Space Apps Challenge 2017 Project
 ### SunRays won the prize for Best Use of Data in the NASA Space Apps Challenge and was a global award nominee. For more information, please see the [video and screenshots on the official page](https://2017.spaceappschallenge.org/challenges/earth-and-us/you-are-my-sunshine/teams/untitled1/project).
 
-### Contributors - veselink1, lubomarinski
+### Contributors - [veselink1](https://github.com/veselink1), [lubomarinski](https://github.com/lubomarinski)
 
 # Information:
 SunRays is a mobile application that estimates the electricity production of a photovoltaic system based on a few simple inputs. SunRays calculates estimated values for the system's current, daily, monthly and annual electricity production taking in mind the sun's position and the weather conditions. To assist the precision of the calculation, SunRays uses a number of different data sources, including geolocation, solar position and irradiation data, and weather services.
